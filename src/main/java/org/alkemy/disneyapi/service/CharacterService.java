@@ -8,4 +8,19 @@ import org.alkemy.disneyapi.projection.CharacterProjection;
 public interface CharacterService {
 
 	List<CharacterProjection> getCharacters();
+
+	Character addCharacter(Character character);
+
+	Character findById(Long id);
+
+	void deleteById(Long id);
+
+	List<Character> getByName(String name);
+
+	List<Character> getByAge(int age);
+
+	List<Character> getByIdMovie(Long idMovie);
+	
+	
+	
 }

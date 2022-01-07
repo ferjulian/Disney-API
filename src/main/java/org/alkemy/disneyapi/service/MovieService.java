@@ -9,5 +9,10 @@ public interface MovieService {
 
 	List<MovieProjection> getMovies();
 
-	List<Movie> getTodasMovies();
+	Movie findById(Long id);
+
+	void deleteById(Long id);
+
+	Movie addMovie(Movie movie);
+
 }

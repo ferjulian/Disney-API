@@ -1,6 +1,7 @@
 package org.alkemy.disneyapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.alkemy.disneyapi.entity.Movie;
 import org.alkemy.disneyapi.projection.MovieProjection;
@@ -16,14 +17,42 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public List<MovieProjection> getMovies() {
-		// TODO Auto-generated method stub
+
 		return movieRepository.getAllMovies();
 	}
+	
 
 	@Override
-	public List<Movie> getTodasMovies() {
-		// TODO Auto-generated method stub
-		return movieRepository.findAll();
+	public Movie findById(Long id) {
+		
+Optional<Movie> result = movieRepository.findById(id);
+		
+		Movie theMovie = null;
+		
+		if (result.isPresent()) {
+			
+			theMovie = result.get();
+		}
+		
+		return theMovie;
 	}
+
+	
+	@Override
+	public void deleteById(Long id) {
+		
+		movieRepository.deleteById(id);
+		
+	}
+	
+
+	@Override
+	public Movie addMovie(Movie movie) {
+		
+		return movieRepository.save(movie);
+	}
+
+	
+	
 
 }

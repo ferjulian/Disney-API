@@ -13,4 +13,11 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
 	@Query(value="Select * from characters", nativeQuery=true)
 	List<CharacterProjection> getAllCharacters();
 
+	List<Character> findByName(String name);
+	
+	List<Character> findByAge(int age);
+	
+	List<Character> findByMoviesId(Long movieId);
+	
+	
 }
