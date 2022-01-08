@@ -13,4 +13,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 	//@Query(value="Select * from movies", nativeQuery=true)
 	@Query("Select m from Movie m")
 	List<MovieProjection> getAllMovies();
+	
+	List<Movie> findByTitle(String name);
+	
+	List<Movie> findByGenresId(Long id);
+	
+	List<Movie> findAllByOrderByCreationDateAsc();
+	List<Movie> findAllByOrderByCreationDateDesc();
 }

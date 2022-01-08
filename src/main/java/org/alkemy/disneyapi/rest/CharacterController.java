@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.alkemy.disneyapi.entity.Character;
+import org.alkemy.disneyapi.exception.CharacterNotFoundException;
 import org.alkemy.disneyapi.projection.CharacterProjection;
 import org.alkemy.disneyapi.service.CharacterService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class CharacterController {
 		Character tempCharacter = characterService.findById(id);
 
 		if (tempCharacter == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			throw new CharacterNotFoundException("Character id not found -" + id);
 		}
 
 		
@@ -65,12 +65,12 @@ public class CharacterController {
 		
 		if(tempCharacter == null) {
 			
-			throw new RuntimeException("Character id not found -" + id);
+			throw new CharacterNotFoundException("Character id not found -" + id);
 		}
 		
 		characterService.deleteById(id);
 		
-		return "Delete employee id" + id;
+		return "Delete character id " + id;
 	}
 	
 	
@@ -80,7 +80,8 @@ public class CharacterController {
 		Character tempCharacter = characterService.findById(id);
 		
 		if(tempCharacter == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
+			throw new CharacterNotFoundException("Character id not found -" + id);
 		}
 		
 		
@@ -93,20 +94,41 @@ public class CharacterController {
 	@RequestMapping(value = "/characters", params = "name")
 	public ResponseEntity<List<Character>> getByName(@RequestParam String name) {
 
+		List<Character> result = characterService.getByName(name);
+		
+		if(result.isEmpty()) {
+			
+			throw new CharacterNotFoundException("The character " + name + " doesn't exist");
+		}
+		
 		return ResponseEntity.ok().body(characterService.getByName(name));
 	}
 	
 
 	@RequestMapping(value = "/characters", params = "age")
 	public ResponseEntity<List<Character>> getByAge(@RequestParam int age) {
+		
+		List<Character> result = characterService.getByAge(age);
 
-		return ResponseEntity.ok().body(characterService.getByAge(age));
+		if (result.isEmpty()) {
+
+			throw new CharacterNotFoundException("There are no characters with that age");
+					}
+
+		return ResponseEntity.ok().body(result);
 	}
 	
 	@RequestMapping(value = "/characters", params = "idMovie")
 	public ResponseEntity<List<Character>> getByIdMovie(@RequestParam Long idMovie) {
 
-		return ResponseEntity.ok().body(characterService.getByIdMovie(idMovie));
+		List<Character> result = characterService.getByIdMovie(idMovie);
+
+		if (result.isEmpty()) {
+
+			throw new CharacterNotFoundException("There are no characters for movie id - " + idMovie);
+		}
+		
+		return ResponseEntity.ok().body(result);
 	}
 
 

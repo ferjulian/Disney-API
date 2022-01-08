@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.alkemy.disneyapi.entity.Movie;
+import org.alkemy.disneyapi.exception.MovieNotFoundException;
 import org.alkemy.disneyapi.projection.MovieProjection;
 import org.alkemy.disneyapi.service.MovieService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,7 +41,7 @@ public class MovieController {
 		Movie tempMovie = movieService.findById(id);
 
 		if (tempMovie == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			throw new MovieNotFoundException("Movie id not found -" + id);
 		}
 
 		
@@ -64,12 +65,12 @@ public class MovieController {
 		
 		if(tempMovie == null) {
 			
-			throw new RuntimeException("Character id not found -" + id);
+			throw new MovieNotFoundException("Movie id not found - " + id);
 		}
 		
 		movieService.deleteById(id);
 		
-		return "Delete movie id" + id;
+		return "Delete movie id " + id;
 	}
 	
 	
@@ -79,7 +80,7 @@ public class MovieController {
 		Movie tempMovie = movieService.findById(id);
 		
 		if(tempMovie == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			throw new MovieNotFoundException("Movie id not found - " + id);
 		}
 		
 		
@@ -87,5 +88,54 @@ public class MovieController {
 		
 		return ResponseEntity.created(uri).body(movieService.addMovie(movie));
 	}
+	
+	
+	
+	@RequestMapping(value = "/movies", params = "name")
+	public ResponseEntity<List<Movie>> getByName(@RequestParam String name) {
+
+		List<Movie> result = movieService.getByName(name);
+
+		if (result.isEmpty()) {
+
+			throw new MovieNotFoundException("The movie " + name + " doesn't exist");
+		}
+		
+		return ResponseEntity.ok().body(result);
+	}
+	
+	
+	@RequestMapping(value = "/movies", params = "genre")
+	public ResponseEntity<List<Movie>> getByIdGenre(@RequestParam Long genre) {
+
+		List<Movie> result = movieService.getByIdGenre(genre);
+
+		if (result.isEmpty()) {
+
+			throw new MovieNotFoundException("There are no movies for genre id - " + genre);
+		}
+
+		
+		return ResponseEntity.ok().body(result);
+	}
+	
+	
+	@RequestMapping(value = "/movies", params = "order")
+	public ResponseEntity<List<Movie>> getSortedMovies(@RequestParam String order) {
+
+		List<Movie> result = movieService.sortMovies(order);
+
+		if (result == null) {
+
+			throw new MovieNotFoundException(order + " --> is not a correct parameter");
+		}
+		
+		
+		return ResponseEntity.ok().body(result);
+	}
+
+	
+	
+
 	
 }

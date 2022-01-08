@@ -52,6 +52,38 @@ Optional<Movie> result = movieRepository.findById(id);
 		return movieRepository.save(movie);
 	}
 
+
+	@Override
+	public List<Movie> getByName(String name) {
+		
+		return movieRepository.findByTitle(name);
+	}
+
+
+	@Override
+	public List<Movie> getByIdGenre(Long genre) {
+		
+		return movieRepository.findByGenresId(genre);
+	}
+
+
+	@Override
+	public List<Movie> sortMovies(String order) {
+		
+		String result = order.toUpperCase();
+		
+		if(result.equals("ASC")){
+			
+			return movieRepository.findAllByOrderByCreationDateAsc();
+		
+		}else if( result.equals("DESC") ) {
+			
+			return movieRepository.findAllByOrderByCreationDateDesc();
+		}
+		
+		return null;
+	}
+
 	
 	
 

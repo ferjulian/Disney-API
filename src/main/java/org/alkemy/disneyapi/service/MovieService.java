@@ -15,4 +15,10 @@ public interface MovieService {
 
 	Movie addMovie(Movie movie);
 
+	List<Movie> getByName(String name);
+
+	List<Movie> getByIdGenre(Long genre);
+
+	List<Movie> sortMovies(String order);
+
 }
