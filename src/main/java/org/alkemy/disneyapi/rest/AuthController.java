@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController 
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 	
 	private final UserService userService;
@@ -29,9 +31,11 @@ public class AuthController {
 	}
 	
 	
-	@PostMapping("/user/save")
+	@PostMapping("/register")
 	public ResponseEntity<User> saveUser(@RequestBody User user) {
 
+	log.info("\n ------------ datos de mi user {}",user);
+	
 	URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
 	
 	return ResponseEntity.created(uri).body(userService.saveUser(user));
