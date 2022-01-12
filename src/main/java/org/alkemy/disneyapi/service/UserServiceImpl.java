@@ -1,8 +1,10 @@
 package org.alkemy.disneyapi.service;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
 
 import org.alkemy.disneyapi.entity.User;
 import org.alkemy.disneyapi.repository.UserRepository;
@@ -13,13 +15,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import lombok.RequiredArgsConstructor;
+
 
 @Service @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final EmailService emailService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,17 +46,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	
 	@Override
-	public User saveUser(User user) {
+	public String saveUser(User user){
 		
+		
+		String username = user.getUsername();
+		String password = user.getPassword();
+		String email = user.getEmail();
+		
+		if (username == null)
+			throw new RuntimeException("the username was not entered");
+		else if (password == null)
+			throw new RuntimeException("the password was not entered");
+		else if (email == null)
+			throw new RuntimeException("the email was not entered");
+
+		if (username.isBlank() || password.isBlank())
+			throw new RuntimeException("Username and password cannot be blank");
+		
+	
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
-	}
-	
-	
-	@Override
-	public List<User> getUsers() {
-		return userRepository.findAll();
-	}
+		
+		userRepository.save(user);
+		
+		try {
+			emailService.sendEmail(email, username);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return user.getUsername() + " your registration was successful!";
+		
+		}
 	
 	
 }

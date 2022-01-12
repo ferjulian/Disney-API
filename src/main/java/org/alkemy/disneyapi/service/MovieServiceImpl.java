@@ -49,6 +49,11 @@ Optional<Movie> result = movieRepository.findById(id);
 	@Override
 	public Movie addMovie(Movie movie) {
 		
+		int rating = movie.getRating();
+		
+		if(rating < 0 || rating > 5)
+			throw new RuntimeException("The rating should be between 1 and 5");
+		
 		return movieRepository.save(movie);
 	}
 
