@@ -119,6 +119,20 @@ public class CharacterController {
 		return ResponseEntity.ok().body(result);
 	}
 	
+	
+	@RequestMapping(value = "/characters", params = "weight")
+	public ResponseEntity<List<Character>> getByWeight(@RequestParam int weight) {
+		
+		List<Character> result = characterService.getByWeight(weight);
+
+		if (result.isEmpty()) {
+
+			throw new CharacterNotFoundException("There are no characters with that weight");
+					}
+
+		return ResponseEntity.ok().body(result);
+	}
+	
 	@RequestMapping(value = "/characters", params = "idMovie")
 	public ResponseEntity<List<Character>> getByIdMovie(@RequestParam Long idMovie) {
 

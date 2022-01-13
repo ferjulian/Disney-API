@@ -19,11 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 @RestController 
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 	
 	private final UserService userService;
-	//private final EmailService emailService;
+
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> saveUser(@RequestBody User user){		

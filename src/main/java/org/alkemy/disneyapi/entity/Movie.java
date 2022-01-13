@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 @Entity  @Table(name="movies") @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Movie {
@@ -51,7 +51,6 @@ public class Movie {
 			joinColumns = {@JoinColumn(name="id_movie")},
 			inverseJoinColumns = {@JoinColumn(name="id_genre")}
 			)
-	@ToString.Exclude
 	private Set<Genre> genres = new HashSet<Genre>();
 	
 	

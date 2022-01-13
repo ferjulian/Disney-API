@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 @Entity @Table(name="genres") @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Genre {
@@ -33,7 +33,6 @@ public class Genre {
 	
 	@ManyToMany(mappedBy = "genres", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JsonIgnore
-	@ToString.Exclude
 	private Set<Movie> movies = new HashSet<Movie>();
 
 }

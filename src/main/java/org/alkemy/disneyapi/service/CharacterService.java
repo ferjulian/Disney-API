@@ -20,6 +20,8 @@ public interface CharacterService {
 	List<Character> getByAge(int age);
 
 	List<Character> getByIdMovie(Long idMovie);
+
+	List<Character> getByWeight(int weight);
 	
 	
 	

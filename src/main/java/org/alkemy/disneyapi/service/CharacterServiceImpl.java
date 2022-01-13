@@ -72,5 +72,12 @@ public class CharacterServiceImpl implements CharacterService {
 	}
 
 
+	@Override
+	public List<Character> getByWeight(int weight) {
+		
+		return characterRepository.findByWeight(weight);
+	}
+
+
 
 }

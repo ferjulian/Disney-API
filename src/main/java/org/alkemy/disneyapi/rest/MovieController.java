@@ -105,14 +105,14 @@ public class MovieController {
 	}
 	
 	
-	@RequestMapping(value = "/movies", params = "genre")
-	public ResponseEntity<List<Movie>> getByIdGenre(@RequestParam Long genre) {
+	@RequestMapping(value = "/movies", params = "idGenre")
+	public ResponseEntity<List<Movie>> getByIdGenre(@RequestParam Long idGenre) {
 
-		List<Movie> result = movieService.getByIdGenre(genre);
+		List<Movie> result = movieService.getByIdGenre(idGenre);
 
 		if (result.isEmpty()) {
 
-			throw new MovieNotFoundException("There are no movies for genre id - " + genre);
+			throw new MovieNotFoundException("There are no movies for genre id - " + idGenre);
 		}
 
 		
